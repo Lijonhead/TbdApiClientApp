@@ -461,17 +461,17 @@ public static async Task GetUsersNew()
                 var result = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Result from API:\n");
 
-                
-                var users = JsonConvert.DeserializeObject<List<string>>(result);
 
-                
-                var usersViewModel = new ListOfUsersViewModel
-                {
-                    Users = users
-                };
+                        var users = JsonConvert.DeserializeObject<List<string>>(result);
 
-               
-                foreach (var userName in usersViewModel.Users)
+
+                        var usersViewModel = new ListOfUsersViewModel
+                        {
+                            Users = users
+                        };
+
+
+                        foreach (var userName in usersViewModel.Users)
                 {
                     Console.WriteLine($"User Name: {userName}");
                 }
@@ -507,7 +507,7 @@ public static async Task GetGenresNew(int userId)
                 Console.WriteLine("Result from API:\n");
 
               
-                var genresList = JsonConvert.DeserializeObject<List<ViewModels.GenresViewModel>>(result);
+                var genresList = JsonConvert.DeserializeObject<List<ViewModels.GenreViewModel>>(result);
 
            
                 foreach (var genre in genresList)
@@ -546,6 +546,5 @@ public static void EscapeKeyCall()
         }
     } while (key != ConsoleKey.Escape);
 }
-        }
     }
 }
