@@ -394,10 +394,9 @@ namespace TbdApiConsoleApp
                     Console.WriteLine($"Exception: {ex.Message}");
                 }
 
-
             }
-
-            public static async Task GetSongsNew(int userid)
+            }
+ public static async Task GetSongsNew(int userid)
 {
     using (HttpClient client = new HttpClient())
     {
@@ -417,7 +416,7 @@ namespace TbdApiConsoleApp
                 var result = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Result from API:\n");
 
-                var SongList = JsonConvert.DeserializeObject<List<ViewModels.SongsViewModel>>(result);
+                var SongList = JsonConvert.DeserializeObject<List<ViewModels.SongViewModel>>(result);
 
 
                 foreach (var song in SongList)
