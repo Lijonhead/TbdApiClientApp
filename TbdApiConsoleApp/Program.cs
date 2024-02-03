@@ -1,4 +1,7 @@
-﻿namespace TbdApiConsoleApp
+﻿using Newtonsoft.Json;
+using System.Text;
+
+namespace TbdApiConsoleApp
 {
     internal class Program
     {
@@ -107,6 +110,150 @@
                 } while (true);
 
 
+            }
+
+        }
+        public static async Task AddUser()
+        {
+
+
+            using (HttpClient client = new HttpClient())
+            {
+                Console.WriteLine("Enter User Name");
+                string username = Console.ReadLine();
+
+                string apiUrl = "https://localhost:7224/AddUser/";
+
+                var User = new { UserName = username };
+
+                string user = JsonConvert.SerializeObject(User);
+                var content = new StringContent(user, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        Console.WriteLine($"Result from API:\n{result}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
+            }
+
+
+
+        }
+
+        public static async Task AddArtist()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                Console.WriteLine("Enter the userId:");
+                if (!int.TryParse(Console.ReadLine(), out int userId))
+                {
+                    Console.WriteLine("Invalid userId.");
+                    return;
+                }
+
+                Console.WriteLine("Enter the Artist Name:");
+                string artistName = Console.ReadLine();
+                Console.WriteLine("Enter the Artist Description:");
+                string artistDescription = Console.ReadLine();
+
+                Console.WriteLine("Calling WebAPI....");
+
+                string apiUrl = $"https://localhost:7224/AddArtists/{userId}";
+
+
+                var artist = new List<object>
+     {
+         new { ArtistName = artistName, ArtistDescription = artistDescription }
+     };
+
+                string artists = JsonConvert.SerializeObject(artist);
+                var content = new StringContent(artists, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        Console.WriteLine($"Result from API:\n{result}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
+            }
+        }
+
+        public static async Task AddGenre()
+        {
+
+            using (HttpClient client = new HttpClient())
+            {
+                Console.WriteLine("Enter User Id");
+                if (!int.TryParse(Console.ReadLine(), out int userId))
+                {
+                    Console.WriteLine("Invalid userId.");
+                    return;
+                }
+                Console.WriteLine("Enter Artist Id");
+
+                if (!int.TryParse(Console.ReadLine(), out int artistId))
+                {
+                    Console.WriteLine("Invalid userId.");
+                    return;
+                }
+
+                Console.WriteLine("Enter Genre Title");
+                string title = Console.ReadLine();
+                string apiUrl = $"https://localhost:7224/AddGenres/{userId}/{artistId}";
+
+                var Genre = new List<object>
+     {
+         new {Title= title  }
+     };
+                string genres = JsonConvert.SerializeObject(Genre);
+                var content = new StringContent(genres, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        Console.WriteLine($"Result from API:\n{result}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
             }
         }
     }
