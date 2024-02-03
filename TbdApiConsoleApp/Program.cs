@@ -464,10 +464,10 @@ public static async Task GetUsersNew()
                         var users = JsonConvert.DeserializeObject<List<string>>(result);
 
 
-                        var usersViewModel = new ListOfUsersViewModel
-                        {
-                            Users = users
-                        };
+                      var usersViewModel = new ListOfUsersViewModel
+                     {
+                     Users = users
+                     };
 
 
                         foreach (var userName in usersViewModel.Users)
