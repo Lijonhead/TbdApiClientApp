@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
+using TbdApiConsoleApp.ViewModels;
 
 namespace TbdApiConsoleApp
 {
