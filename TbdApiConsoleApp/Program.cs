@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Hello");
             static async Task Main(string[] args)
             {
                 do
