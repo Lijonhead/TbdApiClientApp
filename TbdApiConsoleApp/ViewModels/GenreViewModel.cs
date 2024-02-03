@@ -8,5 +8,11 @@ namespace TbdApiConsoleApp.ViewModels
 {
     internal class GenreViewModel
     {
+        public int genreId { get; set; }
+        public string title { get; set; }
+
+
+
+        public List<GenreViewModel> genres { get; set; }
     }
 }

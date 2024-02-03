@@ -8,5 +8,8 @@ namespace TbdApiConsoleApp.ViewModels
 {
     internal class SongViewModel
     {
+
+        public int songId { get; set; }
+        public string songTitle { get; set; }
     }
 }

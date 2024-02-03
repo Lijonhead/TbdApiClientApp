@@ -8,5 +8,6 @@ namespace TbdApiConsoleApp.ViewModels
 {
     internal class ListOfUsersViewModel
     {
+        public List<string> Users { get; set; }
     }
 }
