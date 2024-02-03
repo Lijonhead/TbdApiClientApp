@@ -1,4 +1,7 @@
-﻿namespace TbdApiConsoleApp
+﻿using Newtonsoft.Json;
+using System.Text;
+
+namespace TbdApiConsoleApp
 {
     internal class Program
     {
@@ -104,6 +107,149 @@
                             break;
                     }
                 } while (true);
+
+
+            }
+        }
+        public static async Task AddSongs()
+        {
+            Console.WriteLine("Enter User Id");
+            if (!int.TryParse(Console.ReadLine(), out int userId))
+            {
+                Console.WriteLine("Invalid userId.");
+                return;
+            }
+            Console.WriteLine("Enter Artist Id");
+
+            if (!int.TryParse(Console.ReadLine(), out int artistId))
+            {
+                Console.WriteLine("Invalid Artist Id.");
+                return;
+            }
+
+            Console.WriteLine("Enter GenreId");
+
+            if (!int.TryParse(Console.ReadLine(), out int genreId))
+            {
+                Console.WriteLine("Invalid Genre Id.");
+                return;
+            }
+
+            Console.WriteLine("Enter Song Title");
+            string songtitle = Console.ReadLine();
+
+            using (HttpClient client = new HttpClient())
+            {
+
+
+
+                string apiUrl = $"https://localhost:7224/AddSongs/{userId}/{artistId}/{genreId}";
+
+                var Song = new List<object>
+        {
+            new {SongTitle= songtitle }
+        };
+                string songs = JsonConvert.SerializeObject(Song);
+                var content = new StringContent(songs, Encoding.UTF8, "application/json");
+
+                try
+                {
+                    var response = await client.PostAsync(apiUrl, content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        Console.WriteLine($"Result from API:\n{result}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
+            }
+        }
+
+        public static async Task GetUsernew(int userid)
+        {
+
+            using (HttpClient client = new HttpClient())
+            {
+                Console.WriteLine("Calling WebAPI....");
+
+
+                string apiUrl = $"https://localhost:7224/GetUser/{userid}";
+
+                try
+                {
+                    var response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Result from API:\n");
+
+
+                        Console.WriteLine(JsonConvert.DeserializeObject($"{result}"));
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
+
+
+            }
+        }
+
+
+        public static async Task GetArtistsNew(int userid)
+        {
+
+            using (HttpClient client = new HttpClient())
+            {
+                Console.WriteLine("Calling WebAPI....");
+
+
+                string apiUrl = $"https://localhost:7224/GetArtists/{userid}";
+
+                try
+                {
+                    var response = await client.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var result = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Result from API:\n");
+
+                        var ArtistsList = JsonConvert.DeserializeObject<List<ViewModels.ArtistsViewModel>>(result);
+
+
+                        foreach (var artist in ArtistsList)
+                        {
+                            Console.WriteLine($"Artist ID: {artist.artistId}, Artist Name: {artist.artistName}, Artist Description: {artist.artistDescription}");
+                        }
+
+
+
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
 
 
             }
