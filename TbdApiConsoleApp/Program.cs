@@ -5,9 +5,7 @@ namespace TbdApiConsoleApp
 {
     internal class Program
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello");
+        
             static async Task Main(string[] args)
             {
                 do
@@ -112,7 +110,7 @@ namespace TbdApiConsoleApp
 
             }
 
-        }
+        
         public static async Task AddUser()
         {
 
@@ -398,6 +396,156 @@ namespace TbdApiConsoleApp
 
 
             }
+
+            public static async Task GetSongsNew(int userid)
+{
+    using (HttpClient client = new HttpClient())
+    {
+        Console.WriteLine("Calling WebAPI....");
+
+
+        string apiUrl = $"https://localhost:7224/GetSongs/{userid}";
+       
+        try
+        { 
+            var response = await client.GetAsync(apiUrl);
+           
+           
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Result from API:\n");
+
+                var SongList = JsonConvert.DeserializeObject<List<ViewModels.SongsViewModel>>(result);
+
+
+                foreach (var song in SongList)
+                {
+                    Console.WriteLine($"Song ID: {song.songId}, Song Title: {song.songTitle}");
+                }
+
+
+
+            }
+
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+
+       
+    }
+
+}
+
+public static async Task GetUsersNew()
+{
+    using (HttpClient client = new HttpClient())
+    {
+        Console.WriteLine("Calling WebAPI....");
+
+        string apiUrl = "https://localhost:7224/GetUsers";
+
+        try
+        {
+            var response = await client.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Result from API:\n");
+
+                
+                var users = JsonConvert.DeserializeObject<List<string>>(result);
+
+                
+                var usersViewModel = new ListOfUsersViewModel
+                {
+                    Users = users
+                };
+
+               
+                foreach (var userName in usersViewModel.Users)
+                {
+                    Console.WriteLine($"User Name: {userName}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+    }
+}
+
+
+public static async Task GetGenresNew(int userId)
+{
+    using (HttpClient client = new HttpClient())
+    {
+        Console.WriteLine("Calling WebAPI....");
+
+        string apiUrl = $"https://localhost:7224/GetGenres/{userId}";
+
+        try
+        {
+            var response = await client.GetAsync(apiUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Result from API:\n");
+
+              
+                var genresList = JsonConvert.DeserializeObject<List<ViewModels.GenresViewModel>>(result);
+
+           
+                foreach (var genre in genresList)
+                {
+                    Console.WriteLine($"Genre ID: {genre.genreId}, Title: {genre.title}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+
+      
+    }
+}
+
+
+public static void EscapeKeyCall()
+{
+    Console.WriteLine("\n\n");
+    Console.WriteLine("\t\t\t\u001b[0m Press \u001b[34m ESC \u001b[0m to exit");
+
+    ConsoleKey key;
+    do
+    {
+        key = Console.ReadKey().Key;
+
+        if (key != ConsoleKey.Escape)
+        {
+            Console.WriteLine("\n\t\t\t\u001b[31m Wrong key pressed. Press \u001b[34m ESC\u001b[0m \u001b[31m to exit.\t\t\t\u001b[0m");
+        }
+    } while (key != ConsoleKey.Escape);
+}
         }
     }
 }
